@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Максим | Разработка сайтов под ключ</title>
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0a0e17;
+            --text-color: #e2e8f0;
+            --accent-color: #00d4ff;
+            --accent-secondary: #7c3aed;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- ПАРАЛЛАКС ФОН --- */
+        .code-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: linear-gradient(180deg, #0a0e17 0%, #111827 100%);
+        }
+
+        .code-lines {
+            position: absolute;
+            width: 100%;
+            height: 200%;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: rgba(0, 212, 255, 0.06);
+            line-height: 1.8;
+            padding: 20px;
+            white-space: pre;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .floating-code {
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-color);
+            opacity: 0.1;
+            font-size: 12px;
+            animation: float 20s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.15; }
+            90% { opacity: 0.15; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- КОНТЕНТ --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* HEADER */
+        header {
+            padding: 25px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 14, 23, 0.9);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .logo span { color: var(--accent-secondary); }
+
+        nav ul {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        nav a {
+            font-size: 0.95rem;
+            transition: 0.3s;
+            position: relative;
+            color: var(--text-color);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: 0.3s;
+        }
+
+        nav a:hover { color: var(--accent-color); }
+        nav a:hover::after { width: 100%; }
+
+        .header-contacts {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .contact-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .contact-link:hover { color: var(--accent-color); }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+            color: var(--bg-color);
+            padding: 12px 28px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before { left: 100%; }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-direction: column;
+            padding: 100px 0;
+        }
+
+        .hero-badge {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-color);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 650px;
+            color: #94a3b8;
+            margin-bottom: 40px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 12px 28px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: 0.3s;
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .code-window {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 50px 0;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            max-width: 700px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .window-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .window-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .code-content {
+            color: #d4d4d4;
+        }
+
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .code-function { color: #dcdcaa; }
+        .code-comment { color: #6a9955; }
+        .code-number { color: #b5cea8; }
+
+        /* SECTIONS */
+        .section {
+            padding: 120px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '//';
+            display: block;
+            color: var(--accent-color);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        /* PRICING */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: 0.4s;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Популярное';
+            position: absolute;
+            top: 20px;
+            right: -35px;
+            background: var(--accent-color);
+            color: var(--bg-color);
+            padding: 5px 40px;
+            transform: rotate(45deg);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+            transform: scaleX(0);
+            transition: 0.4s;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-color);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.15);
+        }
+
+        .pricing-card:hover::before { transform: scaleX(1); }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .pricing-header {
+            margin-bottom: 25px;
+        }
+
+        .pricing-name {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .pricing-description {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            font-weight: 700;
+            margin-bottom: 25px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            color: #e2e8f0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: start;
+            gap: 10px;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .pricing-note {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color);
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        /* ADVANTAGES */
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .advantage-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .advantage-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+        }
+
+        .advantage-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .advantage-card h3 {
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .advantage-card p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        /* CONTACT FORM */
+        .contact-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 60px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .contact-info > p {
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+
+        .contact-methods {
+            margin-bottom: 30px;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: 0.3s;
+        }
+
+        .contact-method:hover {
+            border-color: var(--accent-color);
+            transform: translateX(5px);
+        }
+
+        .contact-method-icon {
+            font-size: 1.5rem;
+        }
+
+        .contact-method-text h4 {
+            color: #fff;
+            margin-bottom: 3px;
+        }
+
+        .contact-method-text a, .contact-method-text span {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px 15px;
+            background: rgba(10, 14, 23, 0.6);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group select option {
+            background: var(--bg-color);
+            color: #fff;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+            color: var(--bg-color);
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .form-message.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            display: block;
+        }
+
+        .form-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            display: block;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            margin-top: 80px;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        /* SCROLL PROGRESS */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+            z-index: 1000;
+            transition: width 0.1s;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+            .contact-section { padding: 40px 25px; }
+            .pricing-card.featured { transform: none; }
+            .pricing-card.featured:hover { transform: translateY(-10px); }
+            nav { display: none; }
+            .header-contacts { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Индикатор прокрутки -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- ПАРАЛЛАКС ФОН -->
+    <div class="code-background" id="codeBackground">
+        <div class="grid-overlay"></div>
+        <div class="code-lines" id="codeLines"></div>
+    </div>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header data-aos="fade-down" data-aos-duration="1000">
+            <div class="logo">&lt;Maxim<span>Dev</span> /&gt;</div>
+            <nav>
+                <ul>
+                    <li><a href="#services">Услуги</a></li>
+                    <li><a href="#pricing">Цены</a></li>
+                    <li><a href="#advantages">Преимущества</a></li>
+                    <li><a href="#contact">Контакты</a></li>
+                </ul>
+            </nav>
+            <div class="header-contacts">
+                <a href="tel:+79533736073" class="contact-link">📞 +7 (953) 373-60-73</a>
+                <a href="https://t.me/maksim_alex" class="btn" target="_blank">Telegram</a>
+            </div>
+        </header>
+
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="hero-badge" data-aos="fade-up" data-aos-delay="200">
+                💼 Открыт для новых проектов
+            </div>
+            
+            <h1 data-aos="fade-up" data-aos-delay="400">
+                Разработка сайтов <br>
+                <span id="typingText"></span>
+            </h1>
+            
+            <p data-aos="fade-up" data-aos-delay="600">
+                Создаю современные, быстрые и адаптивные сайты под ключ. 
+                От лендинга до сложного веб-приложения. Работаю качественно и в срок.
+            </p>
+            
+            <div class="hero-buttons" data-aos="fade-up" data-aos-delay="800">
+                <a href="#contact" class="btn">Обсудить проект</a>
+                <a href="#pricing" class="btn-outline">Смотреть цены</a>
+            </div>
+
+            <!-- Code Window -->
+            <div class="code-window" data-aos="zoom-in" data-aos-delay="1000" data-aos-duration="1200">
+                <div class="window-header">
+                    <div class="window-dot dot-red"></div>
+                    <div class="window-dot dot-yellow"></div>
+                    <div class="window-dot dot-green"></div>
+                </div>
+                <div class="code-content">
+                    <span class="code-keyword">const</span> <span class="code-function">project</span> = {<br>
+                    &nbsp;&nbsp;client: <span class="code-string">"Вы"</span>,<br>
+                    &nbsp;&nbsp;developer: <span class="code-string">"Максим"</span>,<br>
+                    &nbsp;&nbsp;quality: <span class="code-string">"premium"</span>,<br>
+                    &nbsp;&nbsp;deadline: <span class="code-string">"точно в срок"</span>,<br>
+                    &nbsp;&nbsp;support: <span class="code-keyword">true</span>,<br>
+                    &nbsp;&nbsp;<span class="code-function">start</span>: <span class="code-function">function</span>() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">"Свяжитесь со мной!"</span>;<br>
+                    &nbsp;&nbsp;}<br>
+                    };<br>
+                    <span class="code-comment">// Готов начать ваш проект</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRICING -->
+        <section id="pricing" class="section">
+            <h2 class="section-title" data-aos="fade-up">Стоимость разработки</h2>
+            <div class="pricing-grid">
+                <!-- Сайт-визитка -->
+                <div class="pricing-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Сайт-визитка</h3>
+                        <p class="pricing-description">Простой одностраничный сайт для представления вас или вашей компании</p>
+                        <div class="pricing-price">7 000 ₽</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Одна страница с основной информацией</li>
+                        <li>Адаптивный дизайн (мобильная версия)</li>
+                        <li>Форма обратной связи</li>
+                        <li>Интеграция с соцсетями</li>
+                        <li>Размещение на хостинге</li>
+                        <li>Срок: 3-5 дней</li>
+                    </ul>
+                    <div class="pricing-note">
+                        💡 Идеально для: специалистов, небольших компаний, портфолио
+                    </div>
+                </div>
+
+                <!-- Лендинг (популярный) -->
+                <div class="pricing-card featured" data-aos="fade-up" data-aos-delay="200">
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Лендинг (одностраничный)</h3>
+                        <p class="pricing-description">Продающая страница для товара, услуги или мероприятия</p>
+                        <div class="pricing-price">10 000 ₽</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Продающая структура (AIDA)</li>
+                        <li>Уникальный дизайн</li>
+                        <li>Адаптивная вёрстка</li>
+                        <li>Формы захвата (заявки)</li>
+                        <li>Интеграция с мессенджерами</li>
+                        <li>Базовая SEO-оптимизация</li>
+                        <li>Размещение и настройка</li>
+                        <li>Срок: 5-7 дней</li>
+                    </ul>
+                    <div class="pricing-note">
+                        💡 Идеально для: рекламы, акций, одного товара/услуги
+                    </div>
+                </div>
+
+                <!-- Корпоративный сайт -->
+                <div class="pricing-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Корпоративный сайт</h3>
+                        <p class="pricing-description">Многостраничный сайт компании с возможностью редактирования</p>
+                        <div class="pricing-price">25 000 ₽</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>До 10 страниц (Главная, Услуги, О нас, Контакты и др.)</li>
+                        <li><strong>CMS (админка)</strong> — вы сможете сами добавлять/менять контент</li>
+                        <li>Каталог услуг/товаров</li>
+                        <li>Блог/новости</li>
+                        <li>Формы обратной связи</li>
+                        <li>Адаптивный дизайн</li>
+                        <li>SEO-подготовка</li>
+                        <li>Обучение работе с сайтом</li>
+                        <li>Срок: 14-21 день</li>
+                    </ul>
+                    <div class="pricing-note">
+                        💡 Идеально для: компаний, которым нужно регулярно обновлять информацию
+                    </div>
+                </div>
+
+                <!-- Интернет-магазин -->
+                <div class="pricing-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Интернет-магазин</h3>
+                        <p class="pricing-description">Полноценный магазин с корзиной и онлайн-оплатой</p>
+                        <div class="pricing-price">50 000 ₽</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Каталог товаров (до 100 позиций)</li>
+                        <li><strong>Админка</strong> — управление товарами, ценами, заказами</li>
+                        <li>Корзина и оформление заказа</li>
+                        <li>Онлайн-оплата (эквайринг)</li>
+                        <li>Фильтры и поиск</li>
+                        <li>Личный кабинет покупателя</li>
+                        <li>Интеграция с доставкой</li>
+                        <li>Адаптивный дизайн</li>
+                        <li>Срок: 21-30 дней</li>
+                    </ul>
+                    <div class="pricing-note">
+                        💡 Идеально для: продаж товаров онлайн. CMS позволяет вам самостоятельно добавлять товары и управлять заказами
+                    </div>
+                </div>
+
+                <!-- Веб-приложение -->
+                <div class="pricing-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Веб-приложение / CRM</h3>
+                        <p class="pricing-description">Сложный проект с индивидуальной логикой и функционалом</p>
+                        <div class="pricing-price">от 80 000 ₽</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Индивидуальная разработка</li>
+                        <li>Личные кабинеты пользователей</li>
+                        <li>Сложная база данных</li>
+                        <li>API интеграции</li>
+                        <li>Панель администратора</li>
+                        <li>Современный стек (React/Vue + Node.js)</li>
+                        <li>Техническая поддержка</li>
+                        <li>Срок: от 30 дней</li>
+                    </ul>
+                    <div class="pricing-note">
+                        💡 Идеально для: сервисов, платформ, CRM-систем. Точная стоимость после обсуждения ТЗ
+                    </div>
+                </div>
+
+                <!-- Доработка -->
+                <div class="pricing-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Доработка / Поддержка</h3>
+                        <p class="pricing-description">Исправление ошибок, добавление функционала, поддержка</p>
+                        <div class="pricing-price">от 2 000 ₽/час</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Исправление багов</li>
+                        <li>Добавление нового функционала</li>
+                        <li>Оптимизация скорости</li>
+                        <li>Обновление дизайна</li>
+                        <li>Техническая поддержка</li>
+                        <li>Консультации</li>
+                    </ul>
+                    <div class="pricing-note">
+                        💡 Если у вас уже есть сайт, который нужно улучшить или исправить
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADVANTAGES -->
+        <section id="advantages" class="section">
+            <h2 class="section-title" data-aos="fade-up">Почему стоит работать со мной</h2>
+            <div class="advantages-grid">
+                <div class="advantage-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="advantage-icon">⚡</div>
+                    <h3>Быстрая разработка</h3>
+                    <p>Соблюдаю дедлайны. Ваш сайт будет готов точно в оговоренный срок без задержек</p>
+                </div>
+                <div class="advantage-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="advantage-icon">📱</div>
+                    <h3>Адаптивный дизайн</h3>
+                    <p>Сайт будет идеально выглядеть на всех устройствах: телефоны, планшеты, компьютеры</p>
+                </div>
+                <div class="advantage-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="advantage-icon"></div>
+                    <h3>Удобное управление</h3>
+                    <p>Для многостраничных сайтов и магазинов предоставляю CMS — вы сможете сами менять контент без программиста</p>
+                </div>
+                <div class="advantage-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="advantage-icon">🚀</div>
+                    <h3>Современные технологии</h3>
+                    <p>Использую актуальный стек: HTML5, CSS3, JavaScript, React. Быстрая загрузка и безопасность</p>
+                </div>
+                <div class="advantage-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="advantage-icon">💬</div>
+                    <h3>Постоянная связь</h3>
+                    <p>Всегда на связи в Telegram и по телефону. Оперативно отвечаю на вопросы</p>
+                </div>
+                <div class="advantage-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="advantage-icon">🎯</div>
+                    <h3>Индивидуальный подход</h3>
+                    <p>Не использую шаблоны. Каждый проект разрабатываю с учётом ваших задач и пожеланий</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="section">
+            <h2 class="section-title" data-aos="fade-up">Обсудить проект</h2>
+            <div class="contact-section" data-aos="zoom-in" data-aos-duration="1200">
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <h3>Давайте создадим что-то крутое вместе!</h3>
+                        <p>Заполните форму, и я свяжусь с вами в течение часа для обсуждения деталей проекта</p>
+                        
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <div class="contact-method-icon">📞</div>
+                                <div class="contact-method-text">
+                                    <h4>Телефон</h4>
+                                    <a href="tel:+79533736073">+7 (953) 373-60-73</a>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="contact-method-icon">✉️</div>
+                                <div class="contact-method-text">
+                                    <h4>Email</h4>
+                                    <a href="mailto:ma89spb@gmail.com">ma89spb@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="contact-method-icon">✈️</div>
+                                <div class="contact-method-text">
+                                    <h4>Telegram</h4>
+                                    <a href="https://t.me/maksim_alex" target="_blank">@maksim_alex</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(0, 212, 255, 0.05); padding: 20px; border-radius: 10px; border-left: 3px solid var(--accent-color);">
+                            <strong style="color: var(--accent-color); display: block; margin-bottom: 10px;">🚀 Бесплатная консультация</strong>
+                            <p style="color: #94a3b8; font-size: 0.9rem; margin: 0;">
+                                Помогу выбрать оптимальный тип сайта под ваши задачи и бюджет. 
+                                Отвечу на все вопросы по разработке.
+                            </p>
+                        </div>
+                    </div>
+
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Ваше имя *</label>
+                            <input type="text" id="name" name="name" required placeholder="Иван Иванов">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Телефон *</label>
+                            <input type="tel" id="phone" name="phone" required placeholder="+7 (___) ___-__-__">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="example@mail.ru">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="siteType">Тип сайта *</label>
+                            <select id="siteType" name="siteType" required>
+                                <option value="">Выберите тип сайта</option>
+                                <option value="Сайт-визитка (7 000 ₽)">Сайт-визитка — 7 000 ₽</option>
+                                <option value="Лендинг (10 000 ₽)">Лендинг (одностраничный) — 10 000 ₽</option>
+                                <option value="Корпоративный сайт (25 000 ₽)">Корпоративный сайт — 25 000 ₽</option>
+                                <option value="Интернет-магазин (50 000 ₽)">Интернет-магазин — 50 000 ₽</option>
+                                <option value="Веб-приложение (от 80 000 ₽)">Веб-приложение / CRM — от 80 000 ₽</option>
+                                <option value="Доработка существующего сайта">Доработка существующего сайта</option>
+                                <option value="Пока не определился">Пока не определился, нужна консультация</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Описание задачи *</label>
+                            <textarea id="message" name="message" required placeholder="Расскажите кратко о вашем проекте: для чего нужен сайт, какие функции должны быть, есть ли пожелания по дизайну..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            Отправить заявку
+                        </button>
+                        
+                        <div id="formMessage" class="form-message"></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <p>© 2024 Максим. Разработка сайтов под ключ.</p>
+            <p style="margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">
+                &lt;/&gt; Сделано с <span style="color: var(--accent-color);">💙</span> и кофе
+            </p>
+            <p style="margin-top: 15px; font-size: 0.85rem;">
+                <a href="https://github.com" target="_blank">GitHub</a> • 
+                <a href="https://vercel.com" target="_blank">Vercel</a> • 
+                <a href="https://t.me/maksim_alex" target="_blank">Telegram</a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- AOS Animation JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Инициализация AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: false,
+            offset: 100
+        });
+
+        // --- ГЕНЕРАЦИЯ ФОНА С КОДОМ ---
+        const codeLines = document.getElementById('codeLines');
+        const codeBackground = document.getElementById('codeBackground');
+        
+        const codeWords = ['function', 'const', 'let', 'var', 'return', 'if', 'else', 'for', 'while', 'class', 'import', 'export', 'async', 'await', '=>', '{}', '[]', '()', '</>', 'div', 'span', 'class', 'id', 'href', 'src', 'alt', 'true', 'false', 'null', 'undefined', 'document', 'window', 'console', 'log', 'error', 'React', 'Vue', 'Node', 'API', 'JSON', 'HTML', 'CSS'];
+        
+        function generateCodeLines() {
+            let lines = '';
+            for (let i = 0; i < 100; i++) {
+                let line = '';
+                const indent = '    '.repeat(Math.floor(Math.random() * 3));
+                for (let j = 0; j < 25; j++) {
+                    const randomWord = codeWords[Math.floor(Math.random() * codeWords.length)];
+                    line += randomWord + ' ';
+                }
+                lines += indent + '// ' + line.trim() + '\n';
+            }
+            codeLines.textContent = lines;
+        }
+        
+        generateCodeLines();
+
+        // --- ПАРАЛЛАКС ЭФФЕКТ ---
+        let scrollPosition = 0;
+        let targetPosition = 0;
+        const parallaxSpeed = 0.3;
+
+        window.addEventListener('scroll', () => {
+            targetPosition = window.scrollY;
+        });
+
+        function animateParallax() {
+            scrollPosition += (targetPosition - scrollPosition) * 0.05;
+            codeLines.style.transform = `translateY(${scrollPosition * parallaxSpeed}px)`;
+            
+            const progress = (scrollPosition / (document.body.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('scrollProgress').style.width = progress + '%';
+            
+            requestAnimationFrame(animateParallax);
+        }
+
+        animateParallax();
+
+        // --- ПЛАВАЮЩИЕ ЭЛЕМЕНТЫ ---
+        function createFloatingCode() {
+            const floatingCode = document.createElement('div');
+            floatingCode.className = 'floating-code';
+            floatingCode.textContent = codeWords[Math.floor(Math.random() * codeWords.length)];
+            floatingCode.style.left = Math.random() * 100 + '%';
+            floatingCode.style.animationDuration = (15 + Math.random() * 20) + 's';
+            floatingCode.style.fontSize = (10 + Math.random() * 15) + 'px';
+            codeBackground.appendChild(floatingCode);
+            
+            setTimeout(() => {
+                floatingCode.remove();
+            }, 35000);
+        }
+
+        setInterval(createFloatingCode, 2000);
+
+        // --- ЭФФЕКТ ПЕЧАТНОЙ МАШИНКИ ---
+        const typingText = document.getElementById('typingText');
+        const phrases = ['под ключ', 'для бизнеса', 'быстро и качественно', 'современных технологий'];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typingSpeed = 100;
+
+        function typeEffect() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                typingText.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+                typingSpeed = 50;
+            } else {
+                typingText.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+                typingSpeed = 100;
+            }
+            
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                isDeleting = true;
+                typingSpeed = 2000;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typingSpeed = 500;
+            }
+            
+            setTimeout(typeEffect, typingSpeed);
+        }
+
+        typeEffect();
+
+        // --- МАСКА ДЛЯ ТЕЛЕФОНА ---
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 0) {
+                if (value[0] === '7' || value[0] === '8') {
+                    value = value.substring(1);
+                }
+                let formattedValue = '+7';
+                if (value.length > 0) formattedValue += ' (' + value.substring(0, 3);
+                if (value.length >= 3) formattedValue += ') ' + value.substring(3, 6);
+                if (value.length >= 6) formattedValue += '-' + value.substring(6, 8);
+                if (value.length >= 8) formattedValue += '-' + value.substring(8, 10);
+                e.target.value = formattedValue;
+            }
+        });
+
+        // --- ОТПРАВКА ФОРМЫ ---
+        const contactForm = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formMessage = document.getElementById('formMessage');
+
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Отправка...';
+            formMessage.className = 'form-message';
+            formMessage.style.display = 'none';
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                siteType: document.getElementById('siteType').value,
+                message: document.getElementById('message').value,
+                timestamp: new Date().toLocaleString('ru-RU')
+            };
+            
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    formMessage.textContent = '✅ Заявка отправлена! Я свяжусь с вами в ближайшее время.';
+                    formMessage.className = 'form-message success';
+                    contactForm.reset();
+                } else {
+                    throw new Error(result.error || 'Ошибка отправки');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                formMessage.textContent = '❌ Произошла ошибка. Пожалуйста, свяжитесь со мной напрямую по телефону или Telegram.';
+                formMessage.className = 'form-message error';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Отправить заявку';
+            }
+        });
+
+        // --- ПЛАВНЫЙ СКРОЛЛ ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
