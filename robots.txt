@@ -1,0 +1,12 @@
+# robots.txt для сайта Максима Александрова
+User-agent: *
+Allow: /
+
+# Запрет индексации служебных путей
+Disallow: /api/
+Disallow: /node_modules/
+Disallow: /*.js$
+Disallow: /*.css$
+
+# Указываем путь к sitemap
+Sitemap: https://program-site-ebon.vercel.app/sitemap.xml
