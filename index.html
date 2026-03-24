@@ -678,6 +678,36 @@
             nav { display: none; }
             .header-contacts { display: none; }
         }
+        /* --- ФИКСИРОВАННЫЙ КОНТЕЙНЕР ДЛЯ ПЕЧАТНОЙ МАШИНКИ --- */
+.typing-container {
+    display: inline-block;
+    min-height: 1.2em; /* Фиксируем высоту под одну строку */
+    vertical-align: bottom;
+    line-height: 1.1;
+}
+
+.typing-text {
+    color: var(--accent-color);
+    display: inline-block;
+    min-width: 200px; /* Резервируем место под самый длинный текст */
+}
+
+.typing-cursor {
+    color: var(--accent-color);
+    animation: blink 0.7s infinite;
+    font-weight: 400;
+    margin-left: 2px;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Убираем старый бордер-курсор у .typing-text если был */
+.typing-text.paused {
+    /* Пустой класс для совместимости */
+}
     </style>
 </head>
 <body>
@@ -1101,40 +1131,62 @@
 
         setInterval(createFloatingCode, 2000);
 
-        // --- ЭФФЕКТ ПЕЧАТНОЙ МАШИНКИ ---
-        const typingText = document.getElementById('typingText');
-        const phrases = ['под ключ', 'для бизнеса', 'быстро и качественно', 'современных технологий'];
-        let phraseIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let typingSpeed = 100;
+        // --- ЭФФЕКТ ПЕЧАТНОЙ МАШИНКИ (без прыжков контента) ---
+const typingText = document.getElementById('typingText');
+const phrases = ['под ключ', 'для бизнеса', 'быстро и качественно', 'современных технологий'];
+let phraseIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+let typingSpeed = 100;
+let isTypingActive = false;
 
-        function typeEffect() {
-            const currentPhrase = phrases[phraseIndex];
-            
-            if (isDeleting) {
-                typingText.textContent = currentPhrase.substring(0, charIndex - 1);
-                charIndex--;
-                typingSpeed = 50;
-            } else {
-                typingText.textContent = currentPhrase.substring(0, charIndex + 1);
-                charIndex++;
-                typingSpeed = 100;
+function typeEffect() {
+    if (!isTypingActive) return;
+    
+    const currentPhrase = phrases[phraseIndex];
+    
+    if (isDeleting) {
+        // Удаляем символы
+        typingText.textContent = currentPhrase.substring(0, charIndex - 1);
+        charIndex--;
+        typingSpeed = 40;
+    } else {
+        // Добавляем символы
+        typingText.textContent = currentPhrase.substring(0, charIndex + 1);
+        charIndex++;
+        typingSpeed = 80;
+    }
+    
+    // Когда слово напечатано полностью
+    if (!isDeleting && charIndex === currentPhrase.length) {
+        isDeleting = true;
+        typingSpeed = 2000; // Пауза перед удалением
+    } 
+    // Когда слово удалено полностью
+    else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        typingSpeed = 300; // Пауза перед новым словом
+    }
+    
+    setTimeout(typeEffect, typingSpeed);
+}
+
+// Intersection Observer — анимация только когда заголовок в поле зрения
+const typingObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            if (!isTypingActive) {
+                isTypingActive = true;
+                typeEffect();
             }
-            
-            if (!isDeleting && charIndex === currentPhrase.length) {
-                isDeleting = true;
-                typingSpeed = 2000;
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                phraseIndex = (phraseIndex + 1) % phrases.length;
-                typingSpeed = 500;
-            }
-            
-            setTimeout(typeEffect, typingSpeed);
+        } else {
+            isTypingActive = false;
         }
+    });
+}, { threshold: 0.4 });
 
-        typeEffect();
+typingObserver.observe(typingText);
 
         // --- МАСКА ДЛЯ ТЕЛЕФОНА ---
         const phoneInput = document.getElementById('phone');
