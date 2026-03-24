@@ -8,5 +8,5 @@ Disallow: /node_modules/
 Disallow: /*.js$
 Disallow: /*.css$
 
-# Указываем путь к sitemap
+# Указываем путь к sitemap (без пробелов!)
 Sitemap: https://program-site-ebon.vercel.app/sitemap.xml
